@@ -102,6 +102,7 @@ public class Table<T> implements CRUDRepository<Long, T> {
      * @param database
      */
     public void initialize(SQLiteDatabase database) {
+
     }
 
     /**

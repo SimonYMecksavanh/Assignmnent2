@@ -20,8 +20,6 @@ public class NoteDatabaseHandler extends SQLiteOpenHelper{
     private static final int DATABASE_VERSION = 1;
 
 
-    // TODO: maybe these could be replaced with a map of tables...
-
     /**
      * Contact database tables
      */
@@ -67,4 +65,4 @@ public class NoteDatabaseHandler extends SQLiteOpenHelper{
         return noteTable;
     }
 }
-}
+

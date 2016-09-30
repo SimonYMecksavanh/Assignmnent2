@@ -89,6 +89,7 @@ public class NoteTable implements CRUDRepository<Long, Note>{
 
     @Override
     public Note read(Long key) throws DatabaseException {
+
         return null;
     }
 

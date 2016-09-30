@@ -132,6 +132,9 @@ public class Table<T> implements CRUDRepository<Long, T> {
      * @return
      */
     public String getId(T element) {
+        //Note note = (Note) element;
+        //Long id = note.getId();
+        //return id.toString();
         throw new RuntimeException("Not implemented"); // or make this method "abstract"
     }
 

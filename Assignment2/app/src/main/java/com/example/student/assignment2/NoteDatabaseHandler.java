@@ -17,7 +17,7 @@ public class NoteDatabaseHandler extends SQLiteOpenHelper{
     /**
      * Update this field for every structural change to the database.
      */
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 13;
 
 
     /**
@@ -61,7 +61,7 @@ public class NoteDatabaseHandler extends SQLiteOpenHelper{
     /**
      * Getters
      */
-    public NoteTable getTable() {
+    public NoteTable getNoteTable() {
         return noteTable;
     }
 }

@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -17,7 +22,9 @@ import android.widget.TextView;
 public class MainActivityFragment extends Fragment {
 
     private ListView notes;
+    private Spinner spinner;
     private ArrayAdapter<Note> adapter;
+
 
     public MainActivityFragment() {
     }
@@ -27,9 +34,55 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
-        notes = (ListView) root.findViewById(R.id.notes_ListView);
 
+        //Get the ListView
+        notes = (ListView) root.findViewById(R.id.notes_ListView);
+        spinner = (Spinner) root.findViewById(R.id.sort_Spinner);
+
+        //Populate spinner
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource( this.getContext(),
+                R.array.sort_choices, android.R.layout.simple_spinner_item);
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner.setAdapter(spinnerAdapter);
+
+
+        //Create and initialize the adapter
         adapter = new NoteDataAdapter(this.getContext());
+        adapter.addAll(NoteData.getData());
+        notes.setAdapter(adapter);
+
+        spinner.getOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String data = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+/*
+        //Get the data from database
+        NoteDatabaseHandler dbh = new NoteDatabaseHandler(getContext());
+        final List<Note> data;
+        try{
+            data = dbh.getNoteTable().readAll();
+            adapter.addAll(data);
+
+        }
+        catch (DatabaseException e){
+            e.printStackTrace();
+        }
+
+        //Connect adapter to the ListView
+        notes.setAdapter(adapter);
+*/
+
 
         return root;
     }

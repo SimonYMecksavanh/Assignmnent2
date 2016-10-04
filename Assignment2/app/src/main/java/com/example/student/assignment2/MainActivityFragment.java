@@ -1,6 +1,7 @@
 package com.example.student.assignment2;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -54,36 +55,38 @@ public class MainActivityFragment extends Fragment {
         adapter = new NoteDataAdapter(this.getContext());
         notes.setAdapter(adapter);
 
+        //Get the data from the database
         NoteDatabaseHandler dbh = new NoteDatabaseHandler(getContext());
         final List<Note> data;
         try{
+            //Add the data to the list
             data = dbh.getNoteTable().readAll();
             adapter.addAll(data);
 
+            //Set up the spinner for sorting
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(final AdapterView<?> parent, View view, final int position, long id) {
-                Toast.makeText(getContext(), parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-                if (parent.getSelectedItem() == "Title") {
-                    Toast.makeText(getContext(), "tegdgdfgfgdg", Toast.LENGTH_SHORT).show();
 
+                String selectedItem = (String) parent.getSelectedItem();
+                //Sort notes by their title Z -> A
+                if (selectedItem.equals("Title")) {
                     Collections.sort(data, new Comparator<Note>() {
 
                         @Override
                         public int compare(Note o1, Note o2) {
-                            Toast.makeText(getContext(), "hdgifhojfdskhfdghjlkfhgjjkfdhklfdhkfshbdfkhjvx", Toast.LENGTH_SHORT).show();
                             return o2.getTitle().compareTo(o1.getTitle());
                         }
                     });
                 }
 
-                if (parent.getSelectedItem() == "Category") {
+                //Group the notes bases on  their category
+                if (selectedItem.equals("Category")) {
                     Collections.sort(data, new Comparator<Note>() {
                         @Override
                         public int compare(Note o1, Note o2) {
 
-                            Toast.makeText(getContext(), "hi", Toast.LENGTH_SHORT).show();
                             return o1.getCategory() - o2.getCategory();
 
                         }
@@ -91,33 +94,46 @@ public class MainActivityFragment extends Fragment {
 
                 }
 
-                if (parent.getSelectedItem() == "Creation Date") {
+                //Sort the note by their creation date present -> pass
+                if (selectedItem.equals("Creation Date")) {
                     Collections.sort(data, new Comparator<Note>() {
                         @Override
                         public int compare(Note o1, Note o2) {
 
-                            Toast.makeText(getContext(), "gooddd", Toast.LENGTH_SHORT).show();
                             return o2.getCreated().compareTo(o1.getCreated());
                         }
                     });
 
                 }
 
-                if (parent.getSelectedItem() == "Reminder") {
+                /*
+                if (selectedItem.equals("Reminder")) {
                     Collections.sort(data, new Comparator<Note>() {
                         @Override
                         public int compare(Note o1, Note o2) {
 
-                            if(o1.isHasReminder() == true && o2.isHasReminder() == false)
-                                return -1;
-                            else if (o2.isHasReminder() == true && o1.isHasReminder() == false)
-                                return 1;
-                            else
-                                return o2.getReminder().compareTo(o1.getReminder());
+                            //if (o1.isHasReminder() == true && o2.isHasReminder() == false)
+                                //return -1;
+                            //else if (o2.isHasReminder() == true && o1.isHasReminder() == false)
+                                //return 1;
+                            //else
+                                //Toast.makeText(getContext(), o1.getReminder().toString(), Toast.LENGTH_SHORT).show();
+                                //return o2.getCreated().compareTo(o1.getCreated());
+
+                            //if(o1.isHasReminder() == true && o2.isHasReminder() == false)
+                                //return -1;
+                            //else if (o2.isHasReminder() == true && o1.isHasReminder() == false)
+                                //return 1;
+                            //else if (o1.isHasReminder() == false && o2.isHasReminder() == false)
+                                //return -1;
+                            //else
+                                //return o2.getReminder().compareTo(o1.getReminder());
+
                         }
                     });
 
-                }
+                }*/
+
                 adapter.clear();
                 adapter.addAll(data);
                 adapter.notifyDataSetChanged();
@@ -135,10 +151,12 @@ public class MainActivityFragment extends Fragment {
         }
 
 
+        //Display data for the selected item in a Toast
         notes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), NoteData.getData().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), adapter.getItem(position).toString(), Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -146,6 +164,7 @@ public class MainActivityFragment extends Fragment {
     }
 
 
+    //Adapter for the notes
     private class NoteDataAdapter extends ArrayAdapter<Note> {
 
         public NoteDataAdapter(Context context) {
@@ -164,20 +183,30 @@ public class MainActivityFragment extends Fragment {
                 root = inflater.inflate(R.layout.list_item_note, parent, false);
             }
 
+            //Get the current note
             Note note = getItem(position);
 
+            //Retrieve the objects from the view
             ImageView category = (ImageView) root.findViewById(R.id.category_ImageView);
             TextView title = (TextView) root.findViewById(R.id.title_TextView);
             TextView body = (TextView) root.findViewById(R.id.body_TextView);
+           // ImageView reminder = (ImageView) root.findViewById(R.id.reminder_ImageView);
 
             category.setBackgroundColor(note.getCategory());
             title.setText(note.getTitle());
             body.setText(note.getBody());
 
+            /*
+            if(note.isHasReminder()){
+                Drawable drawable = getResources().getDrawable(R.drawable.alarm_check);
+                reminder.setImageDrawable(drawable);
+            }*/
+
 
             return root;
         }
 
+        //Get the id of the current note
         @Override
         public long getItemId(int position) {
             return getItem(position).getId(); //Use Note IDs }

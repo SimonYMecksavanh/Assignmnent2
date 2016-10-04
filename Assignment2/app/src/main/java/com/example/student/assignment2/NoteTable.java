@@ -19,14 +19,11 @@ public class NoteTable extends Table<Note>{
      */
     private static final SimpleDateFormat isoISO8601 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.sss");
 
-    private static final String COLUMN_ID = "_id";
     private static final String COLUMN_TITLE = "title";
     private static final String COLUMN_BODY = "body";
     private static final String COLUMN_REMINDER = "reminder";
     private static final String COLUMN_CATEGORY = "category";
     private static final String COLUMN_CREATED = "created";
-
-    private SQLiteOpenHelper dbh;
 
     /**
      * Create a ContactTable with the DB handler.
@@ -36,7 +33,6 @@ public class NoteTable extends Table<Note>{
         super(dbh,"note");
 
         //Create table structure
-        addColumn(new Column(COLUMN_ID, "INTEGER").primaryKey().autoincrement());
         addColumn(new Column(COLUMN_TITLE, "TEXT").unique().notNull());
         addColumn(new Column(COLUMN_BODY, "TEXT"));
         addColumn(new Column(COLUMN_REMINDER, "TEXT"));
@@ -56,6 +52,42 @@ public class NoteTable extends Table<Note>{
 
         return values;
     }
+
+
+    @Override
+    public Note fromCursor(Cursor cursor) throws DatabaseException {
+        Note note = new Note(cursor.getLong(0));
+
+        // get name and phone number
+        note.setTitle(cursor.getString(1));
+        note.setBody(cursor.getString(2));
+
+        if(!cursor.isNull(3)) {
+            try {
+                note.setReminder(isoISO8601.parse(cursor.getString(3)));
+            }
+            catch (ParseException e){
+                throw new DatabaseException(e);
+            }
+        }
+
+        if(!cursor.isNull(4))
+            note.setCategory(cursor.getInt(4));
+
+        if(!cursor.isNull(5)) {
+            try {
+                note.setCreated(isoISO8601.parse(cursor.getString(5)));
+            }
+            catch (ParseException e){
+                throw new DatabaseException(e);
+            }
+        }
+
+
+
+        return note;
+    }
+
 
     @Override
     public String getId(Note element) {

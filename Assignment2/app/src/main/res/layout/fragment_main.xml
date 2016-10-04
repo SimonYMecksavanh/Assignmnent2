@@ -18,8 +18,8 @@
 
     <ListView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="404dp"
         android:id="@+id/notes_ListView"
-        android:layout_weight="1" />
+        android:layout_weight="24.73" />
 
 </LinearLayout>

@@ -12,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -49,40 +52,95 @@ public class MainActivityFragment extends Fragment {
 
         //Create and initialize the adapter
         adapter = new NoteDataAdapter(this.getContext());
-        adapter.addAll(NoteData.getData());
         notes.setAdapter(adapter);
 
-        spinner.getOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String data = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-
-/*
-        //Get the data from database
         NoteDatabaseHandler dbh = new NoteDatabaseHandler(getContext());
         final List<Note> data;
         try{
             data = dbh.getNoteTable().readAll();
             adapter.addAll(data);
 
-        }
-        catch (DatabaseException e){
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(final AdapterView<?> parent, View view, final int position, long id) {
+                Toast.makeText(getContext(), parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                if (parent.getSelectedItem() == "Title") {
+                    Toast.makeText(getContext(), "tegdgdfgfgdg", Toast.LENGTH_SHORT).show();
+
+                    Collections.sort(data, new Comparator<Note>() {
+
+                        @Override
+                        public int compare(Note o1, Note o2) {
+                            Toast.makeText(getContext(), "hdgifhojfdskhfdghjlkfhgjjkfdhklfdhkfshbdfkhjvx", Toast.LENGTH_SHORT).show();
+                            return o2.getTitle().compareTo(o1.getTitle());
+                        }
+                    });
+                }
+
+                if (parent.getSelectedItem() == "Category") {
+                    Collections.sort(data, new Comparator<Note>() {
+                        @Override
+                        public int compare(Note o1, Note o2) {
+
+                            Toast.makeText(getContext(), "hi", Toast.LENGTH_SHORT).show();
+                            return o1.getCategory() - o2.getCategory();
+
+                        }
+                    });
+
+                }
+
+                if (parent.getSelectedItem() == "Creation Date") {
+                    Collections.sort(data, new Comparator<Note>() {
+                        @Override
+                        public int compare(Note o1, Note o2) {
+
+                            Toast.makeText(getContext(), "gooddd", Toast.LENGTH_SHORT).show();
+                            return o2.getCreated().compareTo(o1.getCreated());
+                        }
+                    });
+
+                }
+
+                if (parent.getSelectedItem() == "Reminder") {
+                    Collections.sort(data, new Comparator<Note>() {
+                        @Override
+                        public int compare(Note o1, Note o2) {
+
+                            if(o1.isHasReminder() == true && o2.isHasReminder() == false)
+                                return -1;
+                            else if (o2.isHasReminder() == true && o1.isHasReminder() == false)
+                                return 1;
+                            else
+                                return o2.getReminder().compareTo(o1.getReminder());
+                        }
+                    });
+
+                }
+                adapter.clear();
+                adapter.addAll(data);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+
+        } catch (DatabaseException e) {
             e.printStackTrace();
         }
 
-        //Connect adapter to the ListView
-        notes.setAdapter(adapter);
-*/
 
+        notes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getContext(), NoteData.getData().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return root;
     }

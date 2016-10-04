@@ -106,28 +106,23 @@ public class MainActivityFragment extends Fragment {
 
                 }
 
-                /*
+                //NullPointer Exception
+
+/*
                 if (selectedItem.equals("Reminder")) {
                     Collections.sort(data, new Comparator<Note>() {
                         @Override
                         public int compare(Note o1, Note o2) {
 
-                            //if (o1.isHasReminder() == true && o2.isHasReminder() == false)
-                                //return -1;
-                            //else if (o2.isHasReminder() == true && o1.isHasReminder() == false)
-                                //return 1;
-                            //else
+                            if (o1.isHasReminder() == true && o2.isHasReminder() == false)
+                                return -1;
+                            else if (o2.isHasReminder() == true && o1.isHasReminder() == false)
+                                return 1;
+                            else
                                 //Toast.makeText(getContext(), o1.getReminder().toString(), Toast.LENGTH_SHORT).show();
-                                //return o2.getCreated().compareTo(o1.getCreated());
+                                return o2.getReminder().compareTo(o1.getReminder());
 
-                            //if(o1.isHasReminder() == true && o2.isHasReminder() == false)
-                                //return -1;
-                            //else if (o2.isHasReminder() == true && o1.isHasReminder() == false)
-                                //return 1;
-                            //else if (o1.isHasReminder() == false && o2.isHasReminder() == false)
-                                //return -1;
-                            //else
-                                //return o2.getReminder().compareTo(o1.getReminder());
+
 
                         }
                     });
@@ -190,18 +185,17 @@ public class MainActivityFragment extends Fragment {
             ImageView category = (ImageView) root.findViewById(R.id.category_ImageView);
             TextView title = (TextView) root.findViewById(R.id.title_TextView);
             TextView body = (TextView) root.findViewById(R.id.body_TextView);
-           // ImageView reminder = (ImageView) root.findViewById(R.id.reminder_ImageView);
+            ImageView reminder = (ImageView) root.findViewById(R.id.reminder_ImageView);
 
             category.setBackgroundColor(note.getCategory());
             title.setText(note.getTitle());
             body.setText(note.getBody());
 
-            /*
-            if(note.isHasReminder()){
-                Drawable drawable = getResources().getDrawable(R.drawable.alarm_check);
-                reminder.setImageDrawable(drawable);
-            }*/
 
+            if(note.getReminder() != null)
+                reminder.setImageResource(R.drawable.alarm_check);
+            else if (note.getReminder() == null)
+                reminder.setImageResource(R.drawable.alarm_off);
 
             return root;
         }
